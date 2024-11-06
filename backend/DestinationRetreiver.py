@@ -1,7 +1,7 @@
 import requests
 import os
-
-
+from dotenv import load_dotenv
+load_dotenv()
 GOOGLE_MAP_API_KEY = os.getenv("GOOGLE_MAP_API_KEY")
 
 def getDestinations(query):
@@ -25,7 +25,7 @@ def getDestinations(query):
 def DestinationRetreiverAgent(data):
     destinations = dict()
     for interest in data["interest"]:
-        destinations[interest] = getDestinations(f"{interest} in {data["destination"]}")
+        destinations[interest] = getDestinations(f"{interest} in {data['destination']}")
     return destinations    
 
 if __name__ == "__main__":

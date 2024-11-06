@@ -1,40 +1,56 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]); // State to store the messages
-  const [currentSender, setCurrentSender] = useState("human"); // State to store the current sender
-  const user = { _id: "human", name: "You" }; // User data
-  const chatbot = { _id: "ai", name: "AI Chatbot" }; // Chatbot data
+  const [messageInput, setMessageInput] = useState(''); // State for the input field
+  const navigate = useNavigate();
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    const messageInput = e.target.elements.message;
-    const messageText = messageInput.value.trim();
-  
+    const messageText = messageInput.trim();
+
     if (messageText !== "") {
       const newMessage = {
-        role: currentSender === "human" ? "human" : "assistant",
+        role: "user",
         content: messageText,
       };
-  
-      setMessages([...messages, newMessage]);
-      messageInput.value = "";
-  
+
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setMessageInput("");
+
       try {
-        const response = await axios.post("http://127.0.0.1:5000/chat", [
+        // First, send the message to the /chat endpoint
+        const chatResponse = await axios.post("http://127.0.0.1:5000/chat", [
           ...messages,
           newMessage,
         ]);
-  
+
+        // The chatResponse.data contains the requirement data
+        const requirementData = chatResponse.data;
+
+        // Set the assistant's reply in the chat (you can customize the content)
         const chatbotReply = {
           role: "assistant",
-          content: response.data,
+          content: `Received requirements: ${JSON.stringify(requirementData)}`, 
         };
-  
-        setMessages([...messages, newMessage, chatbotReply]);
+
+        setMessages((prevMessages) => [...prevMessages, chatbotReply]);
+
+        // Now, send the requirementData to the /route endpoint
+        const routeResponse = await axios.post("http://127.0.0.1:5000/route", requirementData);
+
+        const routeData = routeResponse.data;
+
+        console.log("Route Data: ", routeData);
+
+        // Navigate to the maps page with the routeData
+        navigate('/maps', { state: { routeData } });
+
       } catch (error) {
         console.error("Error:", error);
+        // Handle the error, e.g., display an error message to the user
       }
     }
   };
@@ -45,11 +61,11 @@ const Chat = () => {
         GatherGo 集遊
       </div>
       <div className="flex-grow mx-2 overflow-y-auto h-[calc(100vh-168px)]">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div
-            key={message._id}
+            key={index}
             className={`my-2 p-2 rounded ${
-              message.role === "human"
+              message.role === "user"
                 ? "bg-green-200 self-end"
                 : "bg-white self-start"
             }`}
@@ -68,6 +84,8 @@ const Chat = () => {
               name="message"
               placeholder="Enter your message here"
               className="text-lg border border-gray-300 rounded-l p-2 flex-1"
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
             />
             <button
               type="submit"
