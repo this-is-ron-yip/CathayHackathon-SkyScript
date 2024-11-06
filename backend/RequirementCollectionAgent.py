@@ -3,7 +3,7 @@ from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 
-llm = OllamaLLM(model="llama3.1")
+llm = OllamaLLM(model="llama3.2:1b")
 
 
 def ChatAgent(chat_history: list) -> str:
