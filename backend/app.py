@@ -5,17 +5,21 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route("/chat", methods=["POST"])
-def chat():
+def chat():# -> dict[str, Any] | Literal['please provide more data']:# -> dict[str, Any] | Literal['please provide more data']:
     prompt = request.form["message"]
     if "Data insufficient":
         response = "please provide more data"
     else:
-        response = "END CHAT"
+        response = {'destination': 'Hong Kong', 'length': 3, 'interest': 'hiking'}
     return response
 
 
-@app.route("/route", methods=["GET"])
+@app.route("/route", methods=["POST"])
 def get_route():
+    destination = request.form["destination"]
+    length = request.form["length"]
+    interest = request.form["interest"]
+
     data = [
         [
             {'business_status': 'OPERATIONAL', 'formatted_address': '15 Bligh St, Sydney NSW 2000, Australia', 'geometry': {'location': {'lat': -33.8651343, 'lng': 151.2104596}, 'viewport': {'northeast': {'lat': -33.86383727010728, 'lng': 151.2118845298927}, 'southwest': {'lat': -33.86653692989272, 'lng': 151.2091848701073}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png', 'icon_background_color': '#FF9E67', 'icon_mask_base_uri': 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet', 'name': 'Restaurant Hubert', 'opening_hours': {'open_now': True}, 'photos': [{'height': 683, 'html_attributions': [
