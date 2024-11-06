@@ -1,32 +1,23 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
-import {
-  APIProvider,
-  Map,
-  MapCameraChangedEvent,
-} from "@vis.gl/react-google-maps";
+import ReactDOM from "react-dom/client";
+import "../index.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Chat from "./chat";
+import Maps from "./maps";
 
 const App = () => (
-  <APIProvider
-    apiKey={"GOOGLE_MAP_API_KEY"}
-    onLoad={() => console.log("Maps API has loaded.")}
-  >
-    <Map
-      defaultZoom={13}
-      defaultCenter={{ lat: 22.396428, lng: 114.109497 }}
-      onCameraChanged={(ev: MapCameraChangedEvent) =>
-        console.log(
-          "camera changed:",
-          ev.detail.center,
-          "zoom:",
-          ev.detail.zoom
-        )
-      }
-    ></Map>
-  </APIProvider>
+
+  <BrowserRouter>
+    <Routes>
+      <Route path="/chat" element={<Chat />} />
+      <Route path="/maps" element={<Maps />} />
+    </Routes>
+  </BrowserRouter>
+
 );
 
-const root = createRoot(document.getElementById("app"));
+const root = ReactDOM.createRoot(document.getElementById("app"));
 root.render(<App />);
 
 export default App;
