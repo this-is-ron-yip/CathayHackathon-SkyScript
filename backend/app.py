@@ -1,17 +1,15 @@
 from flask import Flask, request
 from flask_cors import CORS
+import uuid
+from RequirementCollectionAgent import RequirementCollectionAgent
 
 app = Flask(__name__)
 CORS(app)
 
 @app.route("/chat", methods=["POST"])
-def chat():# -> dict[str, Any] | Literal['please provide more data']:# -> dict[str, Any] | Literal['please provide more data']:
-    prompt = request.form["message"]
-    if "Data insufficient":
-        response = "please provide more data"
-    else:
-        response = {'destination': 'Hong Kong', 'length': 3, 'interest': 'hiking'}
-    return response
+def chat():
+    chat_history = request.json
+    return RequirementCollectionAgent(chat_history)
 
 
 @app.route("/route", methods=["POST"])
