@@ -3,7 +3,7 @@ from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 
-llm = OllamaLLM(model="llama3.2:1b")
+llm = OllamaLLM(model="llama3.1")
 
 
 def ChatAgent(chat_history: list) -> str:
@@ -26,6 +26,7 @@ def RequirementCollectionAgent(chat_history=[]):
     response = ChatAgent(chat_history)
     
     try:
+        print(response)
         response = ast.literal_eval(response)
     except:
         return f"Please provide information on destination, length of stay and interest"

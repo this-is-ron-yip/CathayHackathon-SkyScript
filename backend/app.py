@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
-import uuid
-from RequirementCollectionAgent import RequirementCollectionAgent
+from RequirementCollection import RequirementCollectionAgent
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +16,7 @@ def get_route():
     destination = request.form["destination"]
     length = request.form["length"]
     interest = request.form["interest"]
+    
 
     data = [
         [
