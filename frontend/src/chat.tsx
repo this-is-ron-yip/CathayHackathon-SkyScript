@@ -43,8 +43,6 @@ const Chat = () => {
 
         const routeData = routeResponse.data;
 
-        console.log("Route Data: ", routeData);
-
         // Navigate to the maps page with the routeData
         navigate('/maps', { state: { routeData } });
 
